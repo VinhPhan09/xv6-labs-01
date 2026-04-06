@@ -200,7 +200,8 @@ UPROGS=\
 	$U/_pingpong\
 	$U/_primes\
 	$U/_find\
-	$U/_cp
+	$U/_cp\
+	$U/_tree
 
 ifeq ($(LAB),syscall)
 UPROGS += \
