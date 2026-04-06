@@ -1,3 +1,108 @@
+diff --git a/Makefile b/Makefile
+index 74e454f..17be275 100644
+--- a/Makefile
++++ b/Makefile
+@@ -194,9 +194,9 @@ UPROGS=\
+ 	$U/_grind\
+ 	$U/_wc\
+ 	$U/_zombie\
+-
+-
+-
++	$U/_sleeptest\
++	$U/_testhello\
++	$U/_sleep
+ 
+ ifeq ($(LAB),syscall)
+ UPROGS += \
+diff --git a/kernel/syscall.c b/kernel/syscall.c
+index ed65409..b12d45c 100644
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -101,10 +101,10 @@ extern uint64 sys_unlink(void);
+ extern uint64 sys_link(void);
+ extern uint64 sys_mkdir(void);
+ extern uint64 sys_close(void);
+-
++extern uint64 sys_hello(void); 
+ // An array mapping syscall numbers from syscall.h
+ // to the function that handles the system call.
+-static uint64 (*syscalls[])(void) = {
++static uint64 (*syscalls[])(void) = { 
+ [SYS_fork]    sys_fork,
+ [SYS_exit]    sys_exit,
+ [SYS_wait]    sys_wait,
+@@ -126,8 +126,8 @@ static uint64 (*syscalls[])(void) = {
+ [SYS_link]    sys_link,
+ [SYS_mkdir]   sys_mkdir,
+ [SYS_close]   sys_close,
++[SYS_hello]   sys_hello,
+ };
+-
+ void
+ syscall(void)
+ {
+diff --git a/kernel/syscall.h b/kernel/syscall.h
+index bc5f356..3ddb78c 100644
+--- a/kernel/syscall.h
++++ b/kernel/syscall.h
+@@ -20,3 +20,4 @@
+ #define SYS_link   19
+ #define SYS_mkdir  20
+ #define SYS_close  21
++#define SYS_hello 22
+\ No newline at end of file
+diff --git a/kernel/sysproc.c b/kernel/sysproc.c
+index 3b4d5bd..273a920 100644
+--- a/kernel/sysproc.c
++++ b/kernel/sysproc.c
+@@ -5,7 +5,21 @@
+ #include "memlayout.h"
+ #include "spinlock.h"
+ #include "proc.h"
++uint64
++sys_hello(void)
++{
++  char name[64]; // Tạo vùng đệm 64 ký tự để chứa tên
++
++  // Gọi argstr với 3 tham số: 
++  // 0: đối số đầu tiên
++  // name: vùng đệm chứa kết quả
++  // sizeof(name): giới hạn độ dài để tránh tràn bộ nhớ
++  if(argstr(0, name, sizeof(name)) < 0)
++    return -1;
+ 
++  printf("Hello, %s\n", name);
++  return 0;
++}
+ uint64
+ sys_exit(void)
+ {
+diff --git a/user/user.h b/user/user.h
+index f16fe27..cff94bd 100644
+--- a/user/user.h
++++ b/user/user.h
+@@ -22,6 +22,7 @@ int getpid(void);
+ char* sbrk(int);
+ int sleep(int);
+ int uptime(void);
++int hello(char*);
+ 
+ // ulib.c
+ int stat(const char*, struct stat*);
+diff --git a/user/usys.pl b/user/usys.pl
+index 01e426e..b0f3d9a 100755
+--- a/user/usys.pl
++++ b/user/usys.pl
+@@ -14,7 +14,7 @@ sub entry {
+     print " ecall\n";
+     print " ret\n";
+ }
+-	
++entry("hello");
+ entry("fork");
+ entry("exit");
+ entry("wait");
 diff --git a/23120406_23120363.patch b/23120406_23120363.patch
 index fab6f43..e69de29 100644
 --- a/23120406_23120363.patch
