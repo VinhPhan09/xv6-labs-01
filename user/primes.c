@@ -3,14 +3,13 @@
 #include "user/user.h"
 
 int min = 2; 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int _pipe[2][2];
     pipe(_pipe[0]);
     int index = 0;
     int num;
-    for(int i=min;i<35;++i){
+    for(int i=min;i < 35;++i){
         write(_pipe[index][1],&i,4);
     }
     close(_pipe[0][1]);
