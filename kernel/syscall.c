@@ -160,17 +160,17 @@ syscall(void)
   int num;
   struct proc *p = myproc();
 
-  num = p->trapframe->a7; // Lấy số hiệu syscall
+  num = p->trapframe->a7; 
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
-    p->trapframe->a0 = syscalls[num](); // Thực thi syscall
+    p->trapframe->a0 = syscalls[num](); 
 
-    // Logic kiểm tra mask: (mask >> num) & 1
+    
     if ((p->trace_mask >> num) & 1) {
       printf("%d: syscall %s -> %d\n", p->pid, syscall_names[num], (int)p->trapframe->a0);
     }
-  // ... phần else ...
+
 } else {
-  // ĐÂY LÀ DÒNG ĐANG IN RA LỖI CỦA BẠN
+  
   printf("%d %s: unknown sys call %d\n", p->pid, p->name, num);
   p->trapframe->a0 = -1;
 }

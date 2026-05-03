@@ -1,7 +1,7 @@
 #include "kernel/types.h"
 #include "kernel/stat.h"
-#include "kernel/param.h" // Cần thiết cho MAXARG
-#include "user/user.h"    // Cần thiết cho trace(), atoi(), printf()
+#include "kernel/param.h" 
+#include "user/user.h"    
 
 int
 main(int argc, char *argv[])
@@ -14,17 +14,17 @@ main(int argc, char *argv[])
     exit(1);
   }
 
-  // Gọi system call trace
+  
   if (trace(atoi(argv[1])) < 0) {
     fprintf(2, "%s: trace failed\n", argv[0]);
     exit(1);
   }
 
-  // Chuẩn bị danh sách đối số để gọi exec
+  
   for(i = 2; i < argc && i < MAXARG; i++){
     nargv[i-2] = argv[i];
   }
-  nargv[i-2] = 0; // Kết thúc mảng bằng null theo quy định của exec
+  nargv[i-2] = 0; 
 
   exec(nargv[0], nargv);
   exit(0);
