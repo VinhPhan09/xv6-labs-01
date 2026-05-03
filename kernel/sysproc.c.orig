@@ -5,7 +5,21 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+uint64
+sys_hello(void)
+{
+  char name[64]; // Tạo vùng đệm 64 ký tự để chứa tên
 
+  // Gọi argstr với 3 tham số: 
+  // 0: đối số đầu tiên
+  // name: vùng đệm chứa kết quả
+  // sizeof(name): giới hạn độ dài để tránh tràn bộ nhớ
+  if(argstr(0, name, sizeof(name)) < 0)
+    return -1;
+
+  printf("Hello, %s\n", name);
+  return 0;
+}
 uint64
 sys_exit(void)
 {
