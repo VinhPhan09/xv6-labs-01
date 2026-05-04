@@ -91,12 +91,9 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
-uint64
-sys_trace(void)
-{
-  int mask;
-  argint(0, &mask); 
-  myproc()->trace_mask = mask;
+
+int sys_hello(void) {
+  printf("Hello, world!\n");
   return 0;
 }
 #include "sysinfo.h"
