@@ -22,8 +22,11 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-int hello(char*);
-int trace(int);
+int hello(void);
+struct ptreeinfo;
+int ptree(struct ptreeinfo* buf, int max);
+
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
