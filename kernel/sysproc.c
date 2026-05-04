@@ -99,3 +99,22 @@ sys_trace(void)
   myproc()->trace_mask = mask;
   return 0;
 }
+#include "sysinfo.h"
+
+uint64 sys_sysinfo(void) {
+  struct sysinfo info;
+  uint64 addr; 
+  struct proc *p = myproc();
+
+  // Lấy địa chỉ đích từ đối số đầu tiên
+  argaddr(0, &addr);
+  // Lấy dữ liệu từ các hàm đã viết 
+  info.freemem = count_free_mem();
+  info.nproc = count_procs();
+
+  // Chép dữ liệu từ Kernel về User Space
+  if(copyout(p->pagetable, addr, (char *)&info, sizeof(info)) < 0)
+    return -1;
+
+  return 0;
+}
